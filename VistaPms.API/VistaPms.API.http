@@ -1,0 +1,6 @@
+@VistaPms.API_HostAddress = http://localhost:5181
+
+GET {{VistaPms.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
