@@ -18,6 +18,11 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
         _currentUserService = currentUserService;
     }
 
+    public DbSet<Room> Rooms => Set<Room>();
+    public DbSet<Guest> Guests => Set<Guest>();
+    public DbSet<Reservation> Reservations => Set<Reservation>();
+
+
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         foreach (var entry in ChangeTracker.Entries<BaseEntity>())

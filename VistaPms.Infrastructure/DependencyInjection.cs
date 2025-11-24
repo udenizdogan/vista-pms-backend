@@ -6,6 +6,7 @@ using VistaPms.Application.Interfaces;
 using VistaPms.Infrastructure.Identity;
 using VistaPms.Infrastructure.Persistence;
 using VistaPms.Infrastructure.Persistence.Repositories;
+using VistaPms.Infrastructure.Services;
 
 namespace VistaPms.Infrastructure;
 
@@ -25,6 +26,8 @@ public static class DependencyInjection
             .AddDefaultTokenProviders();
 
         services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
+
+        services.AddScoped<TokenService>();
 
         return services;
     }
