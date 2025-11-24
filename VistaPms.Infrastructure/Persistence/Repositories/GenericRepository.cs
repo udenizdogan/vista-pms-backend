@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
-using VistaPms.Application.Interfaces;
+using VistaPms.Application.Common.Interfaces;
 using VistaPms.Domain.Entities;
 using VistaPms.Infrastructure.Persistence;
 

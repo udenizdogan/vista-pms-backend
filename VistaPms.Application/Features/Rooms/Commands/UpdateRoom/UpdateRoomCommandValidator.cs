@@ -1,11 +1,14 @@
 using FluentValidation;
 
-namespace VistaPms.Application.Features.Rooms.Commands;
+namespace VistaPms.Application.Features.Rooms.Commands.UpdateRoom;
 
-public class CreateRoomCommandValidator : AbstractValidator<CreateRoomCommand>
+public class UpdateRoomCommandValidator : AbstractValidator<UpdateRoomCommand>
 {
-    public CreateRoomCommandValidator()
+    public UpdateRoomCommandValidator()
     {
+        RuleFor(x => x.Id)
+            .NotEmpty().WithMessage("Room ID is required");
+
         RuleFor(x => x.Number)
             .NotEmpty().WithMessage("Room number is required")
             .MaximumLength(20).WithMessage("Room number must not exceed 20 characters");

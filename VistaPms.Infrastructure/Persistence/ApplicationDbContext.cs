@@ -1,7 +1,8 @@
 using System.Reflection;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using VistaPms.Application.Interfaces;
+using VistaPms.Application.Common.Interfaces;
+using VistaPms.Application.Services;
 using VistaPms.Domain.Entities;
 using VistaPms.Infrastructure.Identity;
 

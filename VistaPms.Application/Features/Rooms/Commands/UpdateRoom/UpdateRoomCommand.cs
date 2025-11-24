@@ -1,9 +1,11 @@
+using Ardalis.Result;
 using MediatR;
 
-namespace VistaPms.Application.Features.Rooms.Commands;
+namespace VistaPms.Application.Features.Rooms.Commands.UpdateRoom;
 
-public record CreateRoomCommand : IRequest<Guid>
+public record UpdateRoomCommand : IRequest<Result>
 {
+    public Guid Id { get; init; }
     public string Number { get; init; } = string.Empty;
     public Guid FloorId { get; init; }
     public Guid RoomTypeId { get; init; }

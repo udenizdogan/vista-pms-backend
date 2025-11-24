@@ -1,4 +1,4 @@
-namespace VistaPms.Application.Interfaces;
+namespace VistaPms.Application.Services;
 
 public interface ICurrentUserService
 {

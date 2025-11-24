@@ -2,11 +2,12 @@ using System.Reflection;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using VistaPms.Application.Common.Behaviors;
 using VistaPms.Application.Mapping;
 
-namespace VistaPms.Application;
+namespace VistaPms.Application.Extensions;
 
-public static class DependencyInjection
+public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
@@ -16,15 +17,15 @@ public static class DependencyInjection
         services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssembly(assembly);
-            
-            // Pipeline Behaviors
-            cfg.AddOpenBehavior(typeof(Common.Behaviors.ValidationBehavior<,>));
-            cfg.AddOpenBehavior(typeof(Common.Behaviors.LoggingBehavior<,>));
-            cfg.AddOpenBehavior(typeof(Common.Behaviors.PerformanceBehavior<,>));
         });
 
         // FluentValidation
         services.AddValidatorsFromAssembly(assembly);
+
+        // Pipeline Behaviors
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceBehavior<,>));
 
         // Mapster Configuration
         MapsterConfiguration.Configure();

@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using VistaPms.Application.Interfaces;
+using VistaPms.Application.Common.Interfaces;
 using VistaPms.Infrastructure.Identity;
 using VistaPms.Infrastructure.Persistence;
 using VistaPms.Infrastructure.Persistence.Repositories;

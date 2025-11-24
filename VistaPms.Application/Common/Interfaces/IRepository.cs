@@ -1,7 +1,7 @@
 using System.Linq.Expressions;
 using VistaPms.Domain.Entities;
 
-namespace VistaPms.Application.Interfaces;
+namespace VistaPms.Application.Common.Interfaces;
 
 public interface IRepository<T> where T : BaseEntity
 {

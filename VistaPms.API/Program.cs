@@ -3,7 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using VistaPms.Application;
-using VistaPms.Application.Interfaces;
+using VistaPms.Application.Services;
 using VistaPms.Infrastructure;
 using VistaPms.API.Services;
 using VistaPms.API.Hubs;
