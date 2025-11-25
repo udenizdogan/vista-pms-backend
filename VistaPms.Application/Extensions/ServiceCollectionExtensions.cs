@@ -3,7 +3,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using VistaPms.Application.Common.Behaviors;
-using VistaPms.Application.Mapping;
+
 
 namespace VistaPms.Application.Extensions;
 
@@ -27,8 +27,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceBehavior<,>));
 
-        // Mapster Configuration
-        MapsterConfiguration.Configure();
+
 
         return services;
     }

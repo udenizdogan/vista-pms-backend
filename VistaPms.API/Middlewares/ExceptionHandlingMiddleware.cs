@@ -3,6 +3,8 @@ using System.Net;
 using System.Text.Json;
 using VistaPms.Application.Common.Exceptions;
 
+using Sentry;
+
 namespace VistaPms.API.Middlewares;
 
 public class ExceptionHandlingMiddleware
@@ -30,31 +32,8 @@ public class ExceptionHandlingMiddleware
 
     private async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
+        SentrySdk.CaptureException(exception);
         _logger.LogError(exception, "An error occurred: {Message}", exception.Message);
-
-        context.Response.ContentType = "application/json";
-
-        var response = exception switch
-        {
-            Application.Common.Exceptions.ValidationException validationException => (object)new
-            {
-                StatusCode = (int)HttpStatusCode.BadRequest,
-                Message = "Validation failed",
-                Errors = (object)validationException.Errors
-            },
-            NotFoundException notFoundException => (object)new
-            {
-                StatusCode = (int)HttpStatusCode.NotFound,
-                Message = notFoundException.Message,
-                Errors = (object?)null
-            },
-            _ => (object)new
-            {
-                StatusCode = (int)HttpStatusCode.InternalServerError,
-                Message = "An internal server error occurred",
-                Errors = (object?)null
-            }
-        };
 
         var statusCode = exception switch
         {
@@ -63,7 +42,27 @@ public class ExceptionHandlingMiddleware
             _ => (int)HttpStatusCode.InternalServerError
         };
 
+        var problemDetails = new Microsoft.AspNetCore.Mvc.ProblemDetails
+        {
+            Status = statusCode,
+            Title = exception switch
+            {
+                Application.Common.Exceptions.ValidationException => "Validation Failed",
+                NotFoundException => "Resource Not Found",
+                _ => "An internal error occurred"
+            },
+            Detail = exception.Message,
+            Instance = context.Request.Path
+        };
+
+        if (exception is Application.Common.Exceptions.ValidationException validationException)
+        {
+            problemDetails.Extensions["errors"] = validationException.Errors;
+        }
+
         context.Response.StatusCode = statusCode;
-        await context.Response.WriteAsync(JsonSerializer.Serialize(response));
+        context.Response.ContentType = "application/problem+json";
+        
+        await context.Response.WriteAsync(JsonSerializer.Serialize(problemDetails));
     }
 }

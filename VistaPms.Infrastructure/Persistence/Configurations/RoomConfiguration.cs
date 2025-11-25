@@ -8,32 +8,31 @@ public class RoomConfiguration : IEntityTypeConfiguration<Room>
 {
     public void Configure(EntityTypeBuilder<Room> builder)
     {
+        builder.ToTable("Rooms");
+
         builder.HasKey(r => r.Id);
 
-        builder.Property(r => r.Number)
+        builder.Property(r => r.RoomNumber)
             .IsRequired()
             .HasMaxLength(20);
 
-        builder.Property(r => r.TenantId)
+        builder.Property(r => r.FloorNumber)
+            .IsRequired();
+
+        builder.Property(r => r.Capacity)
+            .IsRequired();
+
+        builder.Property(r => r.Status)
             .IsRequired()
-            .HasMaxLength(50);
+            .HasConversion<string>();
 
-        builder.HasIndex(r => new { r.TenantId, r.Number })
-            .IsUnique();
+        builder.Property(r => r.Notes)
+            .IsRequired(false);
 
-        builder.HasOne(r => r.Floor)
-            .WithMany(f => f.Rooms)
-            .HasForeignKey(r => r.FloorId)
-            .OnDelete(DeleteBehavior.Restrict);
-
+        // Relationships
         builder.HasOne(r => r.RoomType)
-            .WithMany(rt => rt.Rooms)
+            .WithMany()
             .HasForeignKey(r => r.RoomTypeId)
             .OnDelete(DeleteBehavior.Restrict);
-
-        builder.HasOne(r => r.ActiveRatePlan)
-            .WithMany()
-            .HasForeignKey(r => r.ActiveRatePlanId)
-            .OnDelete(DeleteBehavior.SetNull);
     }
 }

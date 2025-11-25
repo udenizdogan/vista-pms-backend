@@ -6,8 +6,8 @@ namespace VistaPms.Application.Common.Interfaces;
 public interface IApplicationDbContext
 {
     DbSet<Room> Rooms { get; }
-    DbSet<Guest> Guests { get; }
-    DbSet<Reservation> Reservations { get; }
-    
+    DbSet<RoomAmenity> RoomAmenities { get; }
+    DbSet<RoomType> RoomTypes { get; }
+    DbSet<RoomTypeImage> RoomTypeImages { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

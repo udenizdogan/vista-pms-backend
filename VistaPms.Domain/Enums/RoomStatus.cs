@@ -2,7 +2,7 @@ namespace VistaPms.Domain.Enums;
 
 public enum RoomStatus
 {
-    Vacant,
+    Available,
     Occupied,
     Dirty,
     OutOfService

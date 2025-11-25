@@ -2,7 +2,7 @@ using System.Reflection;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using VistaPms.Application.Mapping;
+
 
 namespace VistaPms.Application;
 
@@ -26,8 +26,7 @@ public static class DependencyInjection
         // FluentValidation
         services.AddValidatorsFromAssembly(assembly);
 
-        // Mapster Configuration
-        MapsterConfiguration.Configure();
+
 
         return services;
     }
