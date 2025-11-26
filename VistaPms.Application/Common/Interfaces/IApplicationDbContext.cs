@@ -9,5 +9,6 @@ public interface IApplicationDbContext
     DbSet<RoomAmenity> RoomAmenities { get; }
     DbSet<RoomType> RoomTypes { get; }
     DbSet<RoomTypeImage> RoomTypeImages { get; }
+    DbSet<T> Set<T>() where T : class;
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

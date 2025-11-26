@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using VistaPms.Application.Common.Interfaces;
 using VistaPms.Domain.Entities;
-using VistaPms.Domain.Enums;
 
 namespace VistaPms.Infrastructure.Persistence.Repositories;
 
@@ -45,8 +44,9 @@ public class ReservationRepository : GenericRepository<Reservation>, IReservatio
             .Include(r => r.Guest)
             .Include(r => r.Room)
                 .ThenInclude(room => room.RoomType)
-            .Where(r => r.Status == ReservationStatus.Confirmed || 
-                       r.Status == ReservationStatus.CheckedIn)
+            .Include(r => r.ReservationStatus)
+            .Where(r => r.ReservationStatus.Name == "Confirmed" || 
+                       r.ReservationStatus.Name == "CheckedIn")
             .OrderBy(r => r.CheckIn)
             .ToListAsync(cancellationToken);
     }

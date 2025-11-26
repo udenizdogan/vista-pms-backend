@@ -25,10 +25,8 @@ public class ReservationConfiguration : IEntityTypeConfiguration<Reservation>
             .IsRequired()
             .HasDefaultValue(0);
 
-        builder.Property(r => r.Status)
-            .IsRequired()
-            .HasConversion<string>()
-            .HasMaxLength(50);
+        builder.Property(r => r.ReservationStatusId)
+            .IsRequired();
 
         builder.Property(r => r.TotalPrice)
             .IsRequired()
@@ -51,8 +49,8 @@ public class ReservationConfiguration : IEntityTypeConfiguration<Reservation>
         builder.HasIndex(r => r.RoomId)
             .HasDatabaseName("IX_Reservations_RoomId");
 
-        builder.HasIndex(r => r.Status)
-            .HasDatabaseName("IX_Reservations_Status");
+        builder.HasIndex(r => r.ReservationStatusId)
+            .HasDatabaseName("IX_Reservations_StatusId");
 
         // Relationships
         builder.HasOne(r => r.Guest)
@@ -68,6 +66,11 @@ public class ReservationConfiguration : IEntityTypeConfiguration<Reservation>
         builder.HasOne(r => r.RatePlan)
             .WithMany(rp => rp.Reservations)
             .HasForeignKey(r => r.RatePlanId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(r => r.ReservationStatus)
+            .WithMany()
+            .HasForeignKey(r => r.ReservationStatusId)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(r => r.Folio)

@@ -18,14 +18,17 @@ public class FolioChargeConfiguration : IEntityTypeConfiguration<FolioCharge>
             .IsRequired()
             .HasColumnType("decimal(18,2)");
 
-        builder.Property(fc => fc.ChargeType)
-            .IsRequired()
-            .HasConversion<string>()
-            .HasMaxLength(50);
+        builder.Property(fc => fc.ChargeTypeId)
+            .IsRequired();
 
         builder.Property(fc => fc.TenantId)
             .IsRequired()
             .HasMaxLength(50);
+
+        builder.HasOne(fc => fc.ChargeType)
+            .WithMany()
+            .HasForeignKey(fc => fc.ChargeTypeId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(fc => fc.Folio)
             .WithMany(f => f.Charges)

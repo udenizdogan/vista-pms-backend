@@ -1,8 +1,8 @@
 using Ardalis.Result;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using VistaPms.Application.Common.Interfaces;
 using VistaPms.Domain.Entities;
-using VistaPms.Domain.Enums;
 
 namespace VistaPms.Application.Features.Reservations.Commands.CreateReservation;
 
@@ -11,15 +11,18 @@ public class CreateReservationCommandHandler : IRequestHandler<CreateReservation
     private readonly IReservationRepository _reservationRepository;
     private readonly IRoomRepository _roomRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IApplicationDbContext _context;
 
     public CreateReservationCommandHandler(
         IReservationRepository reservationRepository,
         IRoomRepository roomRepository,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork,
+        IApplicationDbContext context)
     {
         _reservationRepository = reservationRepository;
         _roomRepository = roomRepository;
         _unitOfWork = unitOfWork;
+        _context = context;
     }
 
     public async Task<Result<Guid>> Handle(CreateReservationCommand request, CancellationToken cancellationToken)
@@ -35,6 +38,14 @@ public class CreateReservationCommandHandler : IRequestHandler<CreateReservation
             return Result<Guid>.Error("Room is not available for the selected dates");
         }
 
+        var pendingStatus = await _context.Set<ReservationStatus>()
+            .FirstOrDefaultAsync(s => s.Name == "Pending", cancellationToken);
+
+        if (pendingStatus == null)
+        {
+            return Result<Guid>.Error("Reservation status 'Pending' not found");
+        }
+
         var reservation = new Reservation
         {
             RoomId = request.RoomId,
@@ -44,7 +55,7 @@ public class CreateReservationCommandHandler : IRequestHandler<CreateReservation
             Adults = request.Adults,
             Children = request.Children,
             RatePlanId = request.RatePlanId,
-            Status = ReservationStatus.Pending,
+            ReservationStatusId = pendingStatus.Id,
             TotalPrice = 0 // Calculate based on rate plan
         };
 

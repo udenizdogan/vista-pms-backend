@@ -1,4 +1,3 @@
-using VistaPms.Domain.Enums;
 using VistaPms.Domain.Interfaces;
 using VistaPms.Domain.ValueObjects;
 
@@ -10,9 +9,11 @@ public class MaintenanceTicket : BaseEntity, IAggregateRoot
     public string CreatedByUserId { get; set; } = string.Empty;
     public string? AssignedToUserId { get; set; }
     public string Description { get; set; } = string.Empty;
-    public MaintenanceStatus Status { get; set; } = MaintenanceStatus.Open;
-    public MaintenancePriority Priority { get; set; } = MaintenancePriority.Medium;
+    public Guid MaintenanceStatusId { get; set; }
+    public Guid MaintenancePriorityId { get; set; }
 
+    public MaintenanceStatus MaintenanceStatus { get; set; } = null!;
+    public MaintenancePriority MaintenancePriority { get; set; } = null!;
     public Room? Room { get; set; }
 
     private readonly List<MaintenancePhoto> _photos = new();

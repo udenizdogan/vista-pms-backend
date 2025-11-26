@@ -25,9 +25,10 @@ public class GetAllRoomsQueryHandler : IRequestHandler<GetAllRoomsQuery, List<Ro
                 Id = r.Id,
                 RoomNumber = r.RoomNumber,
                 FloorNumber = r.FloorNumber,
+                BuildingId = r.BuildingId,
                 RoomTypeId = r.RoomTypeId,
                 Capacity = r.Capacity,
-                Status = r.Status,
+                RoomStatusId = r.RoomStatusId,
                 Notes = r.Notes,
                 CreatedAt = r.CreatedAt,
                 UpdatedAt = r.UpdatedAt

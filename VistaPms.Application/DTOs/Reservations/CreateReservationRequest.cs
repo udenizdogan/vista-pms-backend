@@ -1,6 +1,6 @@
 namespace VistaPms.Application.DTOs.Reservations;
 
-public class CreateReservationDto
+public class CreateReservationRequest
 {
     public Guid RoomId { get; set; }
     public Guid GuestId { get; set; }

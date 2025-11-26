@@ -14,10 +14,8 @@ public class FolioPaymentConfiguration : IEntityTypeConfiguration<FolioPayment>
             .IsRequired()
             .HasColumnType("decimal(18,2)");
 
-        builder.Property(fp => fp.Method)
-            .IsRequired()
-            .HasConversion<string>()
-            .HasMaxLength(50);
+        builder.Property(fp => fp.PaymentMethodId)
+            .IsRequired();
 
         builder.Property(fp => fp.ReferenceNumber)
             .HasMaxLength(200);
@@ -25,6 +23,11 @@ public class FolioPaymentConfiguration : IEntityTypeConfiguration<FolioPayment>
         builder.Property(fp => fp.TenantId)
             .IsRequired()
             .HasMaxLength(50);
+
+        builder.HasOne(fp => fp.PaymentMethod)
+            .WithMany()
+            .HasForeignKey(fp => fp.PaymentMethodId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(fp => fp.Folio)
             .WithMany(f => f.Payments)

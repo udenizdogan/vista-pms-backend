@@ -1,5 +1,3 @@
-using VistaPms.Domain.Enums;
-
 namespace VistaPms.Application.DTOs.Reservations;
 
 public class ReservationDto
@@ -14,7 +12,8 @@ public class ReservationDto
     public int Adults { get; set; }
     public int Children { get; set; }
     public int TotalNights { get; set; }
-    public ReservationStatus Status { get; set; }
+    public Guid ReservationStatusId { get; set; }
+    public string ReservationStatusName { get; set; } = string.Empty;
     public decimal TotalPrice { get; set; }
     public string? RatePlanName { get; set; }
 }

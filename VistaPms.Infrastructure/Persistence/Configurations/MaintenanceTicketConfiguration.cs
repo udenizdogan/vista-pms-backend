@@ -21,19 +21,25 @@ public class MaintenanceTicketConfiguration : IEntityTypeConfiguration<Maintenan
         builder.Property(mt => mt.AssignedToUserId)
             .HasMaxLength(200);
 
-        builder.Property(mt => mt.Status)
-            .IsRequired()
-            .HasConversion<string>()
-            .HasMaxLength(50);
+        builder.Property(mt => mt.MaintenanceStatusId)
+            .IsRequired();
 
-        builder.Property(mt => mt.Priority)
-            .IsRequired()
-            .HasConversion<string>()
-            .HasMaxLength(50);
+        builder.Property(mt => mt.MaintenancePriorityId)
+            .IsRequired();
 
         builder.Property(mt => mt.TenantId)
             .IsRequired()
             .HasMaxLength(50);
+
+        builder.HasOne(mt => mt.MaintenanceStatus)
+            .WithMany()
+            .HasForeignKey(mt => mt.MaintenanceStatusId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(mt => mt.MaintenancePriority)
+            .WithMany()
+            .HasForeignKey(mt => mt.MaintenancePriorityId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         // Value Objects - Owned Entities
         builder.OwnsMany(mt => mt.Photos, p =>

@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using VistaPms.Application.Common.Interfaces;
 using VistaPms.Application.DTOs.Rooms;
 using VistaPms.Domain.Entities;
@@ -22,11 +23,25 @@ public class CreateRoomCommandHandler : IRequestHandler<CreateRoomCommand, Guid>
         {
             RoomNumber = command.Request.RoomNumber,
             FloorNumber = command.Request.FloorNumber,
+            BuildingId = command.Request.BuildingId,
             RoomTypeId = command.Request.RoomTypeId,
             Capacity = command.Request.Capacity,
-            Status = command.Request.Status,
+            RoomStatusId = command.Request.RoomStatusId,
             Notes = command.Request.Notes
         };
+
+        // RoomAmenity'leri ekle
+        if (command.Request.RoomAmenityIds != null && command.Request.RoomAmenityIds.Any())
+        {
+            var amenities = await _context.RoomAmenities
+                .Where(ra => command.Request.RoomAmenityIds.Contains(ra.Id))
+                .ToListAsync(cancellationToken);
+
+            foreach (var amenity in amenities)
+            {
+                room.RoomAmenities.Add(amenity);
+            }
+        }
 
         _context.Rooms.Add(room);
         await _context.SaveChangesAsync(cancellationToken);

@@ -36,22 +36,16 @@ public class RoomAmenitiesController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Guid>> CreateRoomAmenity(CreateRoomAmenityCommand command)
+    public async Task<ActionResult<Guid>> CreateRoomAmenity([FromBody] CreateRoomAmenityRequest request)
     {
-        var id = await _mediator.Send(command);
+        var id = await _mediator.Send(new CreateRoomAmenityCommand(request));
         return CreatedAtAction(nameof(GetRoomAmenity), new { id }, id);
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult> UpdateRoomAmenity(Guid id, UpdateRoomAmenityCommand command)
+    public async Task<ActionResult> UpdateRoomAmenity(Guid id, [FromBody] UpdateRoomAmenityRequest request)
     {
-        if (id != command.Id)
-        {
-            return BadRequest();
-        }
-
-        await _mediator.Send(command);
-
+        await _mediator.Send(new UpdateRoomAmenityCommand(id, request));
         return NoContent();
     }
 

@@ -10,10 +10,8 @@ public class POSOrderConfiguration : IEntityTypeConfiguration<POSOrder>
     {
         builder.HasKey(po => po.Id);
 
-        builder.Property(po => po.Status)
-            .IsRequired()
-            .HasConversion<string>()
-            .HasMaxLength(50);
+        builder.Property(po => po.POSOrderStatusId)
+            .IsRequired();
 
         builder.Property(po => po.TotalAmount)
             .IsRequired()
@@ -22,6 +20,11 @@ public class POSOrderConfiguration : IEntityTypeConfiguration<POSOrder>
         builder.Property(po => po.TenantId)
             .IsRequired()
             .HasMaxLength(50);
+
+        builder.HasOne(po => po.POSOrderStatus)
+            .WithMany()
+            .HasForeignKey(po => po.POSOrderStatusId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(po => po.Folio)
             .WithMany()

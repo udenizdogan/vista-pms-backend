@@ -14,10 +14,8 @@ public class FolioConfiguration : IEntityTypeConfiguration<Folio>
             .IsRequired()
             .HasMaxLength(50);
 
-        builder.Property(f => f.Status)
-            .IsRequired()
-            .HasConversion<string>()
-            .HasMaxLength(50);
+        builder.Property(f => f.FolioStatusId)
+            .IsRequired();
 
         builder.Property(f => f.TenantId)
             .IsRequired()
@@ -28,6 +26,11 @@ public class FolioConfiguration : IEntityTypeConfiguration<Folio>
 
         builder.HasIndex(f => new { f.TenantId, f.FolioNumber })
             .IsUnique();
+
+        builder.HasOne(f => f.FolioStatus)
+            .WithMany()
+            .HasForeignKey(f => f.FolioStatusId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(f => f.Reservation)
             .WithOne(r => r.Folio)

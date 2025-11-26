@@ -2,18 +2,12 @@ using FluentValidation;
 using MediatR;
 using VistaPms.Application.Common.Exceptions;
 using VistaPms.Application.Common.Interfaces;
+using VistaPms.Application.DTOs.RoomAmenities;
 using VistaPms.Domain.Entities;
 
 namespace VistaPms.Application.Features.RoomAmenities.Commands.UpdateRoomAmenity;
 
-public record UpdateRoomAmenityCommand : IRequest
-{
-    public Guid Id { get; init; }
-    public string Name { get; init; } = string.Empty;
-    public string? Description { get; init; }
-    public string? Icon { get; init; }
-    public bool IsActive { get; init; }
-}
+public record UpdateRoomAmenityCommand(Guid Id, UpdateRoomAmenityRequest Request) : IRequest;
 
 public class UpdateRoomAmenityCommandValidator : AbstractValidator<UpdateRoomAmenityCommand>
 {
@@ -22,14 +16,14 @@ public class UpdateRoomAmenityCommandValidator : AbstractValidator<UpdateRoomAme
         RuleFor(v => v.Id)
             .NotEmpty();
 
-        RuleFor(v => v.Name)
+        RuleFor(v => v.Request.Name)
             .NotEmpty().WithMessage("Name is required.")
             .MaximumLength(100).WithMessage("Name must not exceed 100 characters.");
 
-        RuleFor(v => v.Description)
+        RuleFor(v => v.Request.Description)
             .MaximumLength(500).WithMessage("Description must not exceed 500 characters.");
 
-        RuleFor(v => v.Icon)
+        RuleFor(v => v.Request.Icon)
             .MaximumLength(100).WithMessage("Icon must not exceed 100 characters.");
     }
 }
@@ -53,10 +47,10 @@ public class UpdateRoomAmenityCommandHandler : IRequestHandler<UpdateRoomAmenity
             throw new NotFoundException(nameof(RoomAmenity), request.Id);
         }
 
-        entity.Name = request.Name;
-        entity.Description = request.Description;
-        entity.Icon = request.Icon;
-        entity.IsActive = request.IsActive;
+        entity.Name = request.Request.Name;
+        entity.Description = request.Request.Description;
+        entity.Icon = request.Request.Icon;
+        entity.IsActive = request.Request.IsActive;
 
         await _context.SaveChangesAsync(cancellationToken);
     }

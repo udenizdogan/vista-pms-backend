@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using VistaPms.Application.Common.Interfaces;
 using VistaPms.Domain.Entities;
-using VistaPms.Domain.Enums;
 
 namespace VistaPms.Infrastructure.Persistence.Repositories;
 
@@ -30,7 +29,8 @@ public class RoomRepository : GenericRepository<Room>, IRoomRepository
     {
         return await _dbSet
             .Include(r => r.RoomType)
-            .Where(r => r.Status == RoomStatus.Available)
+            .Include(r => r.RoomStatus)
+            .Where(r => r.RoomStatus.Name == "Available")
             .ToListAsync(cancellationToken);
     }
 }

@@ -19,20 +19,20 @@ public class CreateGuestCommandHandler : IRequestHandler<CreateGuestCommand, Res
     public async Task<Result<Guid>> Handle(CreateGuestCommand request, CancellationToken cancellationToken)
     {
         // Check if guest with email already exists
-        var existingGuest = await _guestRepository.GetByEmailAsync(request.Email, cancellationToken);
+        var existingGuest = await _guestRepository.GetByEmailAsync(request.Request.Email, cancellationToken);
         if (existingGuest != null)
         {
-            return Result<Guid>.Error($"Guest with email '{request.Email}' already exists");
+            return Result<Guid>.Error($"Guest with email '{request.Request.Email}' already exists");
         }
 
         var guest = new Guest
         {
-            FirstName = request.FirstName,
-            LastName = request.LastName,
-            Email = request.Email,
-            Phone = request.Phone,
-            Address = request.Address,
-            Nationality = request.Nationality
+            FirstName = request.Request.FirstName,
+            LastName = request.Request.LastName,
+            Email = request.Request.Email,
+            Phone = request.Request.Phone,
+            Address = request.Request.Address,
+            Nationality = request.Request.Nationality
         };
 
         await _guestRepository.AddAsync(guest);
