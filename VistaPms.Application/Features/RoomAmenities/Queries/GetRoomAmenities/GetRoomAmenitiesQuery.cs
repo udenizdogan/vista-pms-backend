@@ -2,27 +2,27 @@ using Mapster;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using VistaPms.Application.Common.Interfaces;
-using VistaPms.Application.DTOs.RoomAmenities;
+using VistaPms.Application.DTOs.RoomFeatures;
 
-namespace VistaPms.Application.Features.RoomAmenities.Queries.GetRoomAmenities;
+namespace VistaPms.Application.Features.RoomFeatures.Queries.GetRoomFeatures;
 
-public record GetRoomAmenitiesQuery : IRequest<IEnumerable<RoomAmenityDto>>
+public record GetRoomFeaturesQuery : IRequest<IEnumerable<RoomFeatureDto>>
 {
     public bool? IsActive { get; init; }
 }
 
-public class GetRoomAmenitiesQueryHandler : IRequestHandler<GetRoomAmenitiesQuery, IEnumerable<RoomAmenityDto>>
+public class GetRoomFeaturesQueryHandler : IRequestHandler<GetRoomFeaturesQuery, IEnumerable<RoomFeatureDto>>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetRoomAmenitiesQueryHandler(IApplicationDbContext context)
+    public GetRoomFeaturesQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<IEnumerable<RoomAmenityDto>> Handle(GetRoomAmenitiesQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<RoomFeatureDto>> Handle(GetRoomFeaturesQuery request, CancellationToken cancellationToken)
     {
-        var query = _context.RoomAmenities.AsQueryable();
+        var query = _context.RoomFeatures.AsQueryable();
 
         if (request.IsActive.HasValue)
         {
@@ -31,6 +31,6 @@ public class GetRoomAmenitiesQueryHandler : IRequestHandler<GetRoomAmenitiesQuer
 
         var amenities = await query.ToListAsync(cancellationToken);
         
-        return amenities.Adapt<List<RoomAmenityDto>>();
+        return amenities.Adapt<List<RoomFeatureDto>>();
     }
 }

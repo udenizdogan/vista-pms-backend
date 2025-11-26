@@ -10,5 +10,4 @@ public class FolioCharge : BaseEntity
 
     public ChargeType ChargeType { get; set; } = null!;
     public Folio Folio { get; set; } = null!;
-    public Product? Product { get; set; }
 }

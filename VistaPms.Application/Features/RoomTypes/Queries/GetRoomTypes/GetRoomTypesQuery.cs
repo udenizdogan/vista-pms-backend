@@ -19,7 +19,7 @@ public class GetRoomTypesQueryHandler : IRequestHandler<GetRoomTypesQuery, List<
     public async Task<List<RoomTypeDto>> Handle(GetRoomTypesQuery request, CancellationToken cancellationToken)
     {
         return await _context.RoomTypes
-            .Include(rt => rt.Images)
+            .Include(rt => rt.RoomTypeImages)
             .Select(rt => new RoomTypeDto
             {
                 Id = rt.Id,
@@ -27,12 +27,12 @@ public class GetRoomTypesQueryHandler : IRequestHandler<GetRoomTypesQuery, List<
                 Description = rt.Description,
                 BasePrice = rt.BasePrice,
                 DefaultCapacity = rt.DefaultCapacity,
-                Amenities = rt.Amenities.Select(a => new RoomAmenityDto
+                Amenities = rt.RoomFeatures.Select(a => new RoomFeatureDto
                 {
                     Name = a.Name,
                     Icon = a.Icon
                 }).ToList(),
-                Images = rt.Images.Select(i => new RoomTypeImageDto
+                Images = rt.RoomTypeImages.Select(i => new RoomTypeImageDto
                 {
                     Id = i.Id,
                     ImageUrl = i.ImageUrl,

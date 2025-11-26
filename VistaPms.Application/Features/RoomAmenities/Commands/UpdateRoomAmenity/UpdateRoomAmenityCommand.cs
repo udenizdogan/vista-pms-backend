@@ -2,16 +2,16 @@ using FluentValidation;
 using MediatR;
 using VistaPms.Application.Common.Exceptions;
 using VistaPms.Application.Common.Interfaces;
-using VistaPms.Application.DTOs.RoomAmenities;
+using VistaPms.Application.DTOs.RoomFeatures;
 using VistaPms.Domain.Entities;
 
-namespace VistaPms.Application.Features.RoomAmenities.Commands.UpdateRoomAmenity;
+namespace VistaPms.Application.Features.RoomFeatures.Commands.UpdateRoomFeature;
 
-public record UpdateRoomAmenityCommand(Guid Id, UpdateRoomAmenityRequest Request) : IRequest;
+public record UpdateRoomFeatureCommand(Guid Id, UpdateRoomFeatureRequest Request) : IRequest;
 
-public class UpdateRoomAmenityCommandValidator : AbstractValidator<UpdateRoomAmenityCommand>
+public class UpdateRoomFeatureCommandValidator : AbstractValidator<UpdateRoomFeatureCommand>
 {
-    public UpdateRoomAmenityCommandValidator()
+    public UpdateRoomFeatureCommandValidator()
     {
         RuleFor(v => v.Id)
             .NotEmpty();
@@ -28,23 +28,23 @@ public class UpdateRoomAmenityCommandValidator : AbstractValidator<UpdateRoomAme
     }
 }
 
-public class UpdateRoomAmenityCommandHandler : IRequestHandler<UpdateRoomAmenityCommand>
+public class UpdateRoomFeatureCommandHandler : IRequestHandler<UpdateRoomFeatureCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public UpdateRoomAmenityCommandHandler(IApplicationDbContext context)
+    public UpdateRoomFeatureCommandHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task Handle(UpdateRoomAmenityCommand request, CancellationToken cancellationToken)
+    public async Task Handle(UpdateRoomFeatureCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _context.RoomAmenities
+        var entity = await _context.RoomFeatures
             .FindAsync(new object[] { request.Id }, cancellationToken);
 
         if (entity == null)
         {
-            throw new NotFoundException(nameof(RoomAmenity), request.Id);
+            throw new NotFoundException(nameof(RoomFeature), request.Id);
         }
 
         entity.Name = request.Request.Name;

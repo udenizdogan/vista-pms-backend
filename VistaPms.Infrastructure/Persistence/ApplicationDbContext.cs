@@ -22,11 +22,14 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
     // DbSets - EF Core will discover entities through configurations
     public DbSet<Room> Rooms => Set<Room>();
-    public DbSet<RoomAmenity> RoomAmenities => Set<RoomAmenity>();
+    public DbSet<RoomFeature> RoomFeatures => Set<RoomFeature>();
     public DbSet<RoomType> RoomTypes => Set<RoomType>();
     public DbSet<RoomTypeImage> RoomTypeImages => Set<RoomTypeImage>();
     public DbSet<Guest> Guests => Set<Guest>();
     public DbSet<Reservation> Reservations => Set<Reservation>();
+    public DbSet<ReservationStatus> ReservationStatuses => Set<ReservationStatus>();
+    public DbSet<RatePlan> RatePlans => Set<RatePlan>();
+    public DbSet<RoomStatus> RoomStatuses => Set<RoomStatus>();
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
@@ -37,7 +40,6 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
                 case EntityState.Added:
                     entry.Entity.CreatedAt = _dateTimeProvider.UtcNow;
                     entry.Entity.TenantId = _currentUserService.TenantId ?? entry.Entity.TenantId;
-                    entry.Entity.BranchId = _currentUserService.BranchId ?? entry.Entity.BranchId;
                     break;
                 case EntityState.Modified:
                     entry.Entity.UpdatedAt = _dateTimeProvider.UtcNow;
@@ -76,16 +78,13 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
     private void SetGlobalQueryFilter<T>(ModelBuilder builder) where T : BaseEntity
     {
-        // 1. Tenant ve Branch filtresi
+        // 1. Tenant filtresi
         // - TenantId her zaman eşleşmeli.
-        // - BranchId: Eğer kullanıcı tam yetkili ise (Genel Müdür) tüm şubeleri görür,
-        //   değilse sadece kendi şubesini görür.
         builder.Entity<T>().HasQueryFilter(e => 
             e.TenantId == _currentUserService.TenantId && 
-            (_currentUserService.HasFullAccess || e.BranchId == _currentUserService.BranchId));
+            (_currentUserService.HasFullAccess));
 
         // 2. İndeksler
         builder.Entity<T>().HasIndex(e => e.TenantId);
-        builder.Entity<T>().HasIndex(e => e.BranchId);
     }
 }

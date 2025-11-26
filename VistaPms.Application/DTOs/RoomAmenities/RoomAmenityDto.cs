@@ -1,6 +1,6 @@
-namespace VistaPms.Application.DTOs.RoomAmenities;
+namespace VistaPms.Application.DTOs.RoomFeatures;
 
-public class RoomAmenityDto
+public class RoomFeatureDto
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;

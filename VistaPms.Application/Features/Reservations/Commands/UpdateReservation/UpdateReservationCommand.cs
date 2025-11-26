@@ -1,10 +1,11 @@
 using Ardalis.Result;
 using MediatR;
 
-namespace VistaPms.Application.Features.Reservations.Commands.CreateReservation;
+namespace VistaPms.Application.Features.Reservations.Commands.UpdateReservation;
 
-public record CreateReservationCommand : IRequest<Result<Guid>>
+public record UpdateReservationCommand : IRequest<Result>
 {
+    public Guid Id { get; init; }
     public Guid RoomId { get; init; }
     public Guid GuestId { get; init; }
     public DateTime CheckIn { get; init; }
@@ -12,5 +13,6 @@ public record CreateReservationCommand : IRequest<Result<Guid>>
     public int Adults { get; init; }
     public int Children { get; init; }
     public Guid RatePlanId { get; init; }
+    public Guid ReservationStatusId { get; init; }
 }
 

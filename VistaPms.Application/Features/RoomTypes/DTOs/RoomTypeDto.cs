@@ -7,6 +7,6 @@ public class RoomTypeDto
     public string? Description { get; set; }
     public decimal BasePrice { get; set; }
     public int DefaultCapacity { get; set; }
-    public List<RoomAmenityDto> Amenities { get; set; } = new();
+    public List<RoomFeatureDto> Amenities { get; set; } = new();
     public List<RoomTypeImageDto> Images { get; set; } = new();
 }

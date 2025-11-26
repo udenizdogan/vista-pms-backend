@@ -41,7 +41,6 @@ public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<Applicati
     {
         public string? UserId => null;
         public string? TenantId => null;
-        public string? BranchId => null;
         public bool HasFullAccess => true; // Assume full access for design time
     }
 

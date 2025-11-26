@@ -1,6 +1,5 @@
 using VistaPms.Domain.Interfaces;
 using VistaPms.Domain.ValueObjects;
-using ValueObjectRoomAmenity = VistaPms.Domain.ValueObjects.RoomAmenity;
 
 namespace VistaPms.Domain.Entities;
 
@@ -11,19 +10,11 @@ public class RoomType : BaseEntity, IAggregateRoot
     public decimal BasePrice { get; set; }
     public int DefaultCapacity { get; set; }
 
-    private readonly List<ValueObjectRoomAmenity> _amenities = new();
-    public IReadOnlyCollection<ValueObjectRoomAmenity> Amenities => _amenities.AsReadOnly();
+    // Amenities (Value Object collection)
+    private readonly List<ValueObjects.RoomFeature> _amenities = new();
+    public IReadOnlyCollection<ValueObjects.RoomFeature> RoomFeatures => _amenities.AsReadOnly();
 
-    private readonly List<Room> _rooms = new();
-    public IReadOnlyCollection<Room> Rooms => _rooms.AsReadOnly();
-
-    private readonly List<RatePlan> _ratePlans = new();
-    public IReadOnlyCollection<RatePlan> RatePlans => _ratePlans.AsReadOnly();
-
-    private readonly List<RoomTypeImage> _images = new();
-    public IReadOnlyCollection<RoomTypeImage> Images => _images.AsReadOnly();
-
-    public void AddAmenity(ValueObjectRoomAmenity amenity)
+    public void AddAmenity(ValueObjects.RoomFeature amenity)
     {
         if (!_amenities.Any(a => a.Name == amenity.Name))
         {
@@ -31,26 +22,31 @@ public class RoomType : BaseEntity, IAggregateRoot
         }
     }
 
-    public void RemoveAmenity(string amenityName)
+    public void RemoveAmenity(string name)
     {
-        var amenity = _amenities.FirstOrDefault(a => a.Name == amenityName);
+        var amenity = _amenities.FirstOrDefault(a => a.Name == name);
         if (amenity != null)
         {
             _amenities.Remove(amenity);
         }
     }
 
+    // Images (Entity collection)
+    private readonly List<RoomTypeImage> _roomTypeImages = new();
+    public IReadOnlyCollection<RoomTypeImage> RoomTypeImages => _roomTypeImages.AsReadOnly();
+
     public void AddImage(RoomTypeImage image)
     {
-        _images.Add(image);
+        image.RoomTypeId = this.Id;
+        _roomTypeImages.Add(image);
     }
 
     public void RemoveImage(Guid imageId)
     {
-        var image = _images.FirstOrDefault(i => i.Id == imageId);
+        var image = _roomTypeImages.FirstOrDefault(i => i.Id == imageId);
         if (image != null)
         {
-            _images.Remove(image);
+            _roomTypeImages.Remove(image);
         }
     }
 }

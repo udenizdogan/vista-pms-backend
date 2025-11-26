@@ -29,7 +29,6 @@ public class GetRoomByIdQueryHandler : IRequestHandler<GetRoomByIdQuery, RoomDto
             Id = room.Id,
             RoomNumber = room.RoomNumber,
             FloorNumber = room.FloorNumber,
-            BuildingId = room.BuildingId,
             RoomTypeId = room.RoomTypeId,
             Capacity = room.Capacity,
             RoomStatusId = room.RoomStatusId,

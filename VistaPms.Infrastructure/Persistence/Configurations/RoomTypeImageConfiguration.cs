@@ -23,7 +23,7 @@ public class RoomTypeImageConfiguration : IEntityTypeConfiguration<RoomTypeImage
             .IsRequired();
 
         builder.HasOne(i => i.RoomType)
-            .WithMany(rt => rt.Images)
+            .WithMany(rt => rt.RoomTypeImages)
             .HasForeignKey(i => i.RoomTypeId)
             .OnDelete(DeleteBehavior.Cascade);
     }

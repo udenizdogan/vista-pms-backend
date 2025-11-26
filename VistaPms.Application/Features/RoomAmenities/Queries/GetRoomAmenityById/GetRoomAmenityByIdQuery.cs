@@ -3,32 +3,32 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using VistaPms.Application.Common.Exceptions;
 using VistaPms.Application.Common.Interfaces;
-using VistaPms.Application.DTOs.RoomAmenities;
+using VistaPms.Application.DTOs.RoomFeatures;
 using VistaPms.Domain.Entities;
 
-namespace VistaPms.Application.Features.RoomAmenities.Queries.GetRoomAmenityById;
+namespace VistaPms.Application.Features.RoomFeatures.Queries.GetRoomFeatureById;
 
-public record GetRoomAmenityByIdQuery(Guid Id) : IRequest<RoomAmenityDto>;
+public record GetRoomFeatureByIdQuery(Guid Id) : IRequest<RoomFeatureDto>;
 
-public class GetRoomAmenityByIdQueryHandler : IRequestHandler<GetRoomAmenityByIdQuery, RoomAmenityDto>
+public class GetRoomFeatureByIdQueryHandler : IRequestHandler<GetRoomFeatureByIdQuery, RoomFeatureDto>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetRoomAmenityByIdQueryHandler(IApplicationDbContext context)
+    public GetRoomFeatureByIdQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<RoomAmenityDto> Handle(GetRoomAmenityByIdQuery request, CancellationToken cancellationToken)
+    public async Task<RoomFeatureDto> Handle(GetRoomFeatureByIdQuery request, CancellationToken cancellationToken)
     {
-        var entity = await _context.RoomAmenities
+        var entity = await _context.RoomFeatures
             .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
         if (entity == null)
         {
-            throw new NotFoundException(nameof(RoomAmenity), request.Id);
+            throw new NotFoundException(nameof(RoomFeature), request.Id);
         }
 
-        return entity.Adapt<RoomAmenityDto>();
+        return entity.Adapt<RoomFeatureDto>();
     }
 }

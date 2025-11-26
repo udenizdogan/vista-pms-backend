@@ -1,6 +1,6 @@
-namespace VistaPms.Application.DTOs.RoomAmenities;
+namespace VistaPms.Application.DTOs.RoomFeatures;
 
-public class CreateRoomAmenityRequest
+public class CreateRoomFeatureRequest
 {
     public string Name { get; set; } = string.Empty;
     public string? Description { get; set; }

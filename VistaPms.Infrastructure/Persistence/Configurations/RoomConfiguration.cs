@@ -19,9 +19,6 @@ public class RoomConfiguration : IEntityTypeConfiguration<Room>
         builder.Property(r => r.FloorNumber)
             .IsRequired();
 
-        builder.Property(r => r.BuildingId)
-            .IsRequired();
-
         builder.Property(r => r.Capacity)
             .IsRequired();
 
@@ -32,11 +29,6 @@ public class RoomConfiguration : IEntityTypeConfiguration<Room>
             .IsRequired(false);
 
         // Relationships
-        builder.HasOne(r => r.Building)
-            .WithMany(b => b.Rooms)
-            .HasForeignKey(r => r.BuildingId)
-            .OnDelete(DeleteBehavior.Restrict);
-
         builder.HasOne(r => r.RoomType)
             .WithMany()
             .HasForeignKey(r => r.RoomTypeId)

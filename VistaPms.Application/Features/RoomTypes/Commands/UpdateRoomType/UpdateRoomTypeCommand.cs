@@ -16,7 +16,7 @@ public record UpdateRoomTypeCommand : IRequest
     public string? Description { get; init; }
     public decimal BasePrice { get; init; }
     public int DefaultCapacity { get; init; }
-    public List<RoomAmenityDto> Amenities { get; init; } = new();
+    public List<RoomFeatureDto> Amenities { get; init; } = new();
     public List<RoomTypeImageDto> Images { get; init; } = new();
 }
 
@@ -43,7 +43,7 @@ public class UpdateRoomTypeCommandHandler : IRequestHandler<UpdateRoomTypeComman
     public async Task Handle(UpdateRoomTypeCommand request, CancellationToken cancellationToken)
     {
         var entity = await _context.RoomTypes
-            .Include(rt => rt.Images)
+            .Include(rt => rt.RoomTypeImages)
             // Amenities are owned, so they are loaded automatically or we might need to ensure they are tracked
             .FirstOrDefaultAsync(rt => rt.Id == request.Id, cancellationToken);
 
@@ -69,7 +69,7 @@ public class UpdateRoomTypeCommandHandler : IRequestHandler<UpdateRoomTypeComman
         // Let's assume we can replace the collection if we had access, but we exposed IReadOnlyCollection.
         // We need to use the methods.
         
-        var existingAmenities = entity.Amenities.ToList();
+        var existingAmenities = entity.RoomFeatures.ToList();
         foreach (var amenity in existingAmenities)
         {
             entity.RemoveAmenity(amenity.Name);
@@ -77,12 +77,12 @@ public class UpdateRoomTypeCommandHandler : IRequestHandler<UpdateRoomTypeComman
 
         foreach (var amenityDto in request.Amenities)
         {
-            entity.AddAmenity(new VistaPms.Domain.ValueObjects.RoomAmenity(amenityDto.Name, amenityDto.Icon));
+            entity.AddAmenity(new VistaPms.Domain.ValueObjects.RoomFeature(amenityDto.Name, amenityDto.Icon));
         }
 
         // Update Images
         // Images are Entities, so we should try to preserve IDs if possible.
-        var existingImages = entity.Images.ToList();
+        var existingImages = entity.RoomTypeImages.ToList();
         
         // Identify images to remove
         var imagesToRemove = existingImages.Where(i => !request.Images.Any(ri => ri.Id == i.Id && ri.Id != Guid.Empty)).ToList();

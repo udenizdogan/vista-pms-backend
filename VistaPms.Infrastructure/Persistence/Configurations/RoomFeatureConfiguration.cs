@@ -4,11 +4,11 @@ using VistaPms.Domain.Entities;
 
 namespace VistaPms.Infrastructure.Persistence.Configurations;
 
-public class RoomAmenityConfiguration : IEntityTypeConfiguration<RoomAmenity>
+public class RoomFeatureConfiguration : IEntityTypeConfiguration<RoomFeature>
 {
-    public void Configure(EntityTypeBuilder<RoomAmenity> builder)
+    public void Configure(EntityTypeBuilder<RoomFeature> builder)
     {
-        builder.ToTable("RoomAmenities");
+        builder.ToTable("RoomFeatures");
 
         builder.Property(ra => ra.Name)
             .IsRequired()
@@ -22,7 +22,7 @@ public class RoomAmenityConfiguration : IEntityTypeConfiguration<RoomAmenity>
 
         // Many-to-Many relationship with Room
         builder.HasMany(ra => ra.Rooms)
-            .WithMany(r => r.RoomAmenities)
-            .UsingEntity(j => j.ToTable("RoomAmenityRooms"));
+            .WithMany(r => r.RoomFeatures)
+            .UsingEntity(j => j.ToTable("RoomFeatureRooms"));
     }
 }

@@ -28,9 +28,8 @@ public class RoomTypeConfiguration : IEntityTypeConfiguration<RoomType>
             .IsRequired()
             .HasMaxLength(50);
 
-        // Value Objects - Owned Entities
-        // Value Objects - Owned Entities
-        builder.OwnsMany(rt => rt.Amenities, a =>
+        // Value Objects - Owned Entities (Amenities)
+        builder.OwnsMany(rt => rt.RoomFeatures, a =>
         {
             a.ToTable("RoomTypeAmenities");
             a.WithOwner().HasForeignKey("RoomTypeId");
@@ -39,12 +38,8 @@ public class RoomTypeConfiguration : IEntityTypeConfiguration<RoomType>
             a.HasKey("RoomTypeId", "Name");
         });
 
-        builder.HasMany(rt => rt.Rooms)
-            .WithOne(r => r.RoomType)
-            .HasForeignKey(r => r.RoomTypeId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder.HasMany(rt => rt.Images)
+        // Images relationship
+        builder.HasMany(rt => rt.RoomTypeImages)
             .WithOne(i => i.RoomType)
             .HasForeignKey(i => i.RoomTypeId)
             .OnDelete(DeleteBehavior.Cascade);

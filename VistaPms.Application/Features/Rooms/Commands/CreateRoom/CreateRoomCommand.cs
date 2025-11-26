@@ -23,23 +23,22 @@ public class CreateRoomCommandHandler : IRequestHandler<CreateRoomCommand, Guid>
         {
             RoomNumber = command.Request.RoomNumber,
             FloorNumber = command.Request.FloorNumber,
-            BuildingId = command.Request.BuildingId,
             RoomTypeId = command.Request.RoomTypeId,
             Capacity = command.Request.Capacity,
             RoomStatusId = command.Request.RoomStatusId,
             Notes = command.Request.Notes
         };
 
-        // RoomAmenity'leri ekle
-        if (command.Request.RoomAmenityIds != null && command.Request.RoomAmenityIds.Any())
+        // RoomFeature'leri ekle
+        if (command.Request.RoomFeatureIds != null && command.Request.RoomFeatureIds.Any())
         {
-            var amenities = await _context.RoomAmenities
-                .Where(ra => command.Request.RoomAmenityIds.Contains(ra.Id))
+            var amenities = await _context.RoomFeatures
+                .Where(ra => command.Request.RoomFeatureIds.Contains(ra.Id))
                 .ToListAsync(cancellationToken);
 
             foreach (var amenity in amenities)
             {
-                room.RoomAmenities.Add(amenity);
+                room.RoomFeatures.Add(amenity);
             }
         }
 

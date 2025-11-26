@@ -28,26 +28,13 @@ Tüm entity'lerin base class'ı
 - `UpdatedAt` (DateTime?)
 - Domain Events support
 
-#### 2. **Building**
-Otel binası
-- `Name`
-- `Description`
-- Navigation: `Floors` (IReadOnlyCollection)
-
-#### 3. **Floor**
-Kat bilgisi
-- `Name`
-- `Order` (int)
-- `BuildingId`
-- Navigation: `Building`, `Rooms`
-
 #### 4. **RoomType**
 Oda tipi (Deluxe, Suite, Standard, vb.)
 - `Name`
 - `Description`
 - `BasePrice` (decimal)
 - `DefaultCapacity` (int)
-- `Amenities` (IReadOnlyCollection<RoomAmenity>)
+- `Amenities` (IReadOnlyCollection<RoomFeature>)
 - Navigation: `Rooms`, `RatePlans`
 
 #### 5. **Room** ⭐ Aggregate Root
@@ -196,7 +183,7 @@ Temizlik görevi
 
 ## 💎 Value Objects (7 adet)
 
-### 1. **RoomAmenity**
+### 1. **RoomFeature**
 Oda olanakları
 - `Name`
 - `Icon`
@@ -407,7 +394,7 @@ VistaPms.Domain/
 │   ├── MaintenanceTicket.cs
 │   └── HousekeepingTask.cs
 ├── ValueObjects/
-│   ├── RoomAmenity.cs
+│   ├── RoomFeature.cs
 │   ├── CancellationPolicy.cs
 │   ├── MaintenancePhoto.cs
 │   ├── Money.cs

@@ -19,9 +19,6 @@ public class Folio : BaseEntity, IAggregateRoot
     private readonly List<FolioPayment> _payments = new();
     public IReadOnlyCollection<FolioPayment> Payments => _payments.AsReadOnly();
 
-    private readonly List<POSOrder> _posOrders = new();
-    public IReadOnlyCollection<POSOrder> POSOrders => _posOrders.AsReadOnly();
-
     public decimal TotalCharges => _charges.Sum(c => c.Amount);
     public decimal TotalPayments => _payments.Sum(p => p.Amount);
     public decimal Balance => TotalCharges - TotalPayments;

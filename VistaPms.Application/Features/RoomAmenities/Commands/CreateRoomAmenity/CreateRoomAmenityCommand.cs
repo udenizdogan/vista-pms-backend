@@ -1,16 +1,16 @@
 using FluentValidation;
 using MediatR;
 using VistaPms.Application.Common.Interfaces;
-using VistaPms.Application.DTOs.RoomAmenities;
+using VistaPms.Application.DTOs.RoomFeatures;
 using VistaPms.Domain.Entities;
 
-namespace VistaPms.Application.Features.RoomAmenities.Commands.CreateRoomAmenity;
+namespace VistaPms.Application.Features.RoomFeatures.Commands.CreateRoomFeature;
 
-public record CreateRoomAmenityCommand(CreateRoomAmenityRequest Request) : IRequest<Guid>;
+public record CreateRoomFeatureCommand(CreateRoomFeatureRequest Request) : IRequest<Guid>;
 
-public class CreateRoomAmenityCommandValidator : AbstractValidator<CreateRoomAmenityCommand>
+public class CreateRoomFeatureCommandValidator : AbstractValidator<CreateRoomFeatureCommand>
 {
-    public CreateRoomAmenityCommandValidator()
+    public CreateRoomFeatureCommandValidator()
     {
         RuleFor(v => v.Request.Name)
             .NotEmpty().WithMessage("Name is required.")
@@ -24,18 +24,18 @@ public class CreateRoomAmenityCommandValidator : AbstractValidator<CreateRoomAme
     }
 }
 
-public class CreateRoomAmenityCommandHandler : IRequestHandler<CreateRoomAmenityCommand, Guid>
+public class CreateRoomFeatureCommandHandler : IRequestHandler<CreateRoomFeatureCommand, Guid>
 {
     private readonly IApplicationDbContext _context;
 
-    public CreateRoomAmenityCommandHandler(IApplicationDbContext context)
+    public CreateRoomFeatureCommandHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Guid> Handle(CreateRoomAmenityCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(CreateRoomFeatureCommand request, CancellationToken cancellationToken)
     {
-        var entity = new RoomAmenity
+        var entity = new RoomFeature
         {
             Name = request.Request.Name,
             Description = request.Request.Description,
@@ -43,7 +43,7 @@ public class CreateRoomAmenityCommandHandler : IRequestHandler<CreateRoomAmenity
             IsActive = request.Request.IsActive
         };
 
-        _context.RoomAmenities.Add(entity);
+        _context.RoomFeatures.Add(entity);
         await _context.SaveChangesAsync(cancellationToken);
 
         return entity.Id;

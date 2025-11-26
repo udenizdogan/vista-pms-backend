@@ -21,7 +21,7 @@ public class GetRoomTypeByIdQueryHandler : IRequestHandler<GetRoomTypeByIdQuery,
     public async Task<RoomTypeDto> Handle(GetRoomTypeByIdQuery request, CancellationToken cancellationToken)
     {
         var entity = await _context.RoomTypes
-            .Include(rt => rt.Images)
+            .Include(rt => rt.RoomTypeImages)
             .FirstOrDefaultAsync(rt => rt.Id == request.Id, cancellationToken);
 
         if (entity == null)
@@ -36,12 +36,12 @@ public class GetRoomTypeByIdQueryHandler : IRequestHandler<GetRoomTypeByIdQuery,
             Description = entity.Description,
             BasePrice = entity.BasePrice,
             DefaultCapacity = entity.DefaultCapacity,
-            Amenities = entity.Amenities.Select(a => new RoomAmenityDto
+            Amenities = entity.RoomFeatures.Select(a => new RoomFeatureDto
             {
                 Name = a.Name,
                 Icon = a.Icon
             }).ToList(),
-            Images = entity.Images.Select(i => new RoomTypeImageDto
+            Images = entity.RoomTypeImages.Select(i => new RoomTypeImageDto
             {
                 Id = i.Id,
                 ImageUrl = i.ImageUrl,

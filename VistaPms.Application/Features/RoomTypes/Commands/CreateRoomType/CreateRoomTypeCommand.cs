@@ -13,7 +13,7 @@ public record CreateRoomTypeCommand : IRequest<Guid>
     public string? Description { get; init; }
     public decimal BasePrice { get; init; }
     public int DefaultCapacity { get; init; }
-    public List<RoomAmenityDto> Amenities { get; init; } = new();
+    public List<RoomFeatureDto> Amenities { get; init; } = new();
     public List<RoomTypeImageDto> Images { get; init; } = new();
 }
 
@@ -54,7 +54,7 @@ public class CreateRoomTypeCommandHandler : IRequestHandler<CreateRoomTypeComman
 
         foreach (var amenityDto in request.Amenities)
         {
-            entity.AddAmenity(new VistaPms.Domain.ValueObjects.RoomAmenity(amenityDto.Name, amenityDto.Icon));
+            entity.AddAmenity(new VistaPms.Domain.ValueObjects.RoomFeature(amenityDto.Name, amenityDto.Icon));
         }
 
         foreach (var imageDto in request.Images)

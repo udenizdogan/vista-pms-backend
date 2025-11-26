@@ -31,14 +31,12 @@ public class FolioChargeConfiguration : IEntityTypeConfiguration<FolioCharge>
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(fc => fc.Folio)
-            .WithMany(f => f.Charges)
+            .WithMany()
             .HasForeignKey(fc => fc.FolioId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasOne(fc => fc.Product)
-            .WithMany(p => p.FolioCharges)
-            .HasForeignKey(fc => fc.ProductId)
-            .OnDelete(DeleteBehavior.SetNull)
+        // ProductId foreign key without navigation property
+        builder.Property(fc => fc.ProductId)
             .IsRequired(false);
     }
 }
